@@ -26,6 +26,13 @@ int main(void)
     if(glewInit() != GLEW_OK){
         std::cout << "GLEW ERROR" << std::endl;
     }
+    
+    std::cout << glGetString(GL_VERSION) << std::endl;
+
+    unsigned int buffer_id;
+    glGenBuffers(1, &buffer_id);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer_id);
+
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
