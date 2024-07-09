@@ -6,7 +6,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#define ASSERT(x) if ((!x)) exit(1)
+#define ASSERT(x) if (!(x)) exit(1)
 #define GLCall(x) ClearGLErrors();\
         x;\
         ASSERT(CheckGLErrors(#x, __FILE__, __LINE__));
@@ -120,6 +120,8 @@ int main(void){
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
+    glfwSwapInterval(1);
+
     if(glewInit() != GLEW_OK){
         std::cout << "GLEW ERROR" << std::endl;
     }
@@ -127,10 +129,10 @@ int main(void){
     std::cout << glGetString(GL_VERSION) << std::endl;
 
     vertex triangle_coordinates[6] = {
-        { -0.5f, -0.5f, 0.0f },
-        { 0.5f, -0.5f, 0.0f },
-        { 0.5f, 0.5f, 0.0f },
-        { -0.5f, 0.5f, 0.0f },
+        { { -0.5f, -0.5f, 0.0f } },
+        { { 0.5f, -0.5f, 0.0f } },
+        { { 0.5f, 0.5f, 0.0f } },
+        { { -0.5f, 0.5f, 0.0f } },
     };
 
     unsigned int indecies[] = {
@@ -156,13 +158,22 @@ int main(void){
     unsigned int shader = CreateShader(source.vertexSource, source.fragmentSource);
     GLCall(glUseProgram(shader));;
 
+    GLCall(int location  = glGetUniformLocation(shader, "u_Color"));
+    ASSERT(location != -1);
+
+    float red_channel = 0.0f;
+    float increment = 0.05f;
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window)){
         /* Render here */
-        GLCall(glClear(GL_COLOR_BUFFER_BIT));;
-
-        GLCall(GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr)));;
-
+        GLCall(glClear(GL_COLOR_BUFFER_BIT));
+        if (red_channel > 1.0f || red_channel < 0.0f){
+            increment = -increment;
+        } 
+        GLCall(glUniform4f(location, red_channel, 0.3f, 0.8f, 1.0f));
+        GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+        red_channel += increment; 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
 
