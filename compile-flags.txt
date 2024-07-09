@@ -1,4 +1,0 @@
--m32
--lopengl32
--lglew32
--lglfw3

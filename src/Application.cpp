@@ -5,10 +5,20 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+struct vertex{
+    float pos[3];
+};
+
+vertex new_vertex = {
+    {0.5f,-0.5f,0.0f}
+};
+
+
 struct shaderProgramSource{
     std::string vertexSource;
     std::string fragmentSource;
 };
+
 
 static shaderProgramSource ParseShader(const std::string& filebuff){
     std::ifstream stream(filebuff);
@@ -98,17 +108,17 @@ int main(void){
     
     std::cout << glGetString(GL_VERSION) << std::endl;
 
-    float triangle_coordinates[6] = {
-        -0.5f, -0.5f,
-        0.0f, 0.5f,
-        0.5f,-0.5f
+    vertex triangle_coordinates[6] = {
+        { -0.5f, -0.5f, 0.0f },
+        { 0.0f, 0.5f, 0.0f },
+        { 0.5f,-0.5f, 0.0f }
     };
 
     unsigned int triangle_buffer;
     glGenBuffers(1, &triangle_buffer);
     glBindBuffer(GL_ARRAY_BUFFER, triangle_buffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6, triangle_coordinates, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertex) * 3, triangle_coordinates, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
     glEnableVertexAttribArray(0);
 
 
