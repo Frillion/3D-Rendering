@@ -116,8 +116,9 @@ int main(void){
 
     glfwSwapInterval(1);
 
-    if(glewInit()){
-        std::cout << "GLEW ERROR" << std::endl;
+    GLenum err = glewInit();
+    if(err != GLEW_OK){
+        std::cout << "GLEW ERROR:" << err << std::endl;
     }
     
     std::cout << glGetString(GL_VERSION) << std::endl;
@@ -147,7 +148,7 @@ int main(void){
 
     IndexBuffer* index_buffer = new IndexBuffer(indecies, 6);
 
-    shaderProgramSource source = ParseShader("D:/3D-Rendering/resources/shaders/Basic.shader");
+    shaderProgramSource source = ParseShader("/home/Frillion/3D-Rendering/resources/shaders/Basic.shader");
     unsigned int shader = CreateShader(source.vertexSource, source.fragmentSource);
     GLCall(glUseProgram(shader));
 
