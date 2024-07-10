@@ -66,7 +66,8 @@ static unsigned int CompileShader(const std::string& source, unsigned int type){
         GLCall(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length));
         char * message = (char *)alloca(length * sizeof(char));
         GLCall(glGetShaderInfoLog(id, length, &length, message));
-        std::cout << "Failed to compile " << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << "shader: " << id << std::endl;
+        std::cout << source << std::endl;
+        std::cout << "Failed to compile" << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << "shader: " << id << std::endl;
         std::cout << message << std::endl;
         GLCall(glDeleteShader(id));
         return 0;
@@ -115,7 +116,7 @@ int main(void){
 
     glfwSwapInterval(1);
 
-    if(glewInit() != GLEW_OK){
+    if(glewInit()){
         std::cout << "GLEW ERROR" << std::endl;
     }
     
