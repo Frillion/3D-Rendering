@@ -172,7 +172,7 @@ int main(void){
         GLCall(glBindVertexArray(vertex_attrib));
         index_buffer->Bind(); 
 
-        GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+        GLCall(glDrawElements(GL_TRIANGLES, index_buffer->GetCount(), GL_UNSIGNED_INT, nullptr));
 
         if (red_channel > 1.0f || red_channel < 0.0f){
             increment = -increment;
