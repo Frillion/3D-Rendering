@@ -81,10 +81,9 @@ int main(void){
     float increment = 0.05f;
 
     GLCall(glBindVertexArray(0));
-    GLCall(glUseProgram(0));
+    shader->UnBind();
     GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-
+    index_buffer->Unbind();
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window)){
         /* Render here */
