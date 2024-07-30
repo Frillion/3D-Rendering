@@ -71,7 +71,6 @@ int main(void){
     IndexBuffer* index_buffer = new IndexBuffer(indecies, 6);
 
     Shader* shader = new Shader("/home/Frillion/3D-Rendering/resources/shaders/Basic.shader");
-    shader->Link();
     shader->Bind();
 
     GLCall(int location  = glGetUniformLocation(shader->GetProgram(), "u_Color"));

@@ -10,18 +10,15 @@ struct shaderProgramSource{
 
 class Shader{
     private:
-        const std::string& file_path;
-        shaderProgramSource shader_source;
-        unsigned int vertex;
-        unsigned int fragment;
-        unsigned int program;
-        unsigned int CompileShader(const std::string& source, GLenum type);
+	unsigned int Renderer_id;
+	const std::string& file_path;
 
     public:
         Shader(const std::string& filebuff);
-        inline unsigned int GetProgram() {return program;}
-        void Link();
-        void Bind();
-        void UnBind();
+	shaderProgramSource ParseShader(const std::string& filepath);
+        unsigned int CreateShader(std::string&vertexSource, std::string&fragmentSource);
+        unsigned int CompileShader(const std::string& source, GLenum type);
+        void Bind() const;
+        void UnBind() const;
         ~Shader();
 };
