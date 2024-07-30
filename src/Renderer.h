@@ -1,12 +1,11 @@
 #pragma once
 #include <iostream>
 #include <GL/glew.h>
+#include "IndexBuffer.h"
+#include "Shader.h"
+#include "VertexArray.h"
 
-#define ASSERT(x) if (!(x)) exit(1)
-#define GLCall(x) ClearGLErrors();\
-        x;\
-        ASSERT(CheckGLErrors(#x, __FILE__, __LINE__));
-
-
-void ClearGLErrors();
-unsigned int CheckGLErrors(const char* function,const char* file, int line);
+class Renderer{
+	public:
+		void Draw(const VertexArray& vertex_attrib, const IndexBuffer& index_buffer, const Shader& program) const;
+};

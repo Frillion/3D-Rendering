@@ -12,3 +12,11 @@ unsigned int CheckGLErrors(const char* function, const char* file, int line){
     }
     return 1;
 }
+
+void Renderer::Draw(const VertexArray& vertex_attrib, const IndexBuffer& index_buffer, const Shader& program) const {
+    program.Bind();
+    vertex_attrib.Bind();
+    index_buffer.Bind(); 
+    GLCall(glDrawElements(GL_TRIANGLES, index_buffer.GetCount(), GL_UNSIGNED_INT, nullptr));
+
+}

@@ -1,12 +1,12 @@
 #include "Shader.h"
-#include "Renderer.h"
+#include "macros.h"
 #include <fstream>
 #include <sstream>
 
 Shader::Shader(const std::string& file_path):
 	file_path(file_path), Renderer_id(0){
-	shaderProgramSource source = ParseShader(file_path);
-	Renderer_id = CreateShader(source.vertexSource, source.fragmentSource);
+	GLCall(shaderProgramSource source = ParseShader(file_path));
+	GLCall(Renderer_id = CreateShader(source.vertexSource, source.fragmentSource));
 }
 
 shaderProgramSource Shader::ParseShader(const std::string& file_path){
@@ -72,6 +72,21 @@ unsigned int Shader::CreateShader(std::string& vertexSource, std::string&fragmen
 	GLCall(glDeleteShader(fragment_shader));
 
 	return program;
+}
+
+void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3){
+	int location = GetUniformLocation(name);
+	GLCall(glUniform4f(location, v0, v1, v2, v3))
+}
+
+int Shader::GetUniformLocation(const std::string& name){
+	if(UniformLocationCahce.find(name) != UniformLocationCahce.end()){
+		return UniformLocationCahce[name];
+	}
+	GLCall(int location = glGetUniformLocation(Renderer_id, name.c_str()));
+	ASSERT(location != -1);
+	UniformLocationCahce[name] = location;
+	return location;
 }
 
 void Shader::Bind() const{

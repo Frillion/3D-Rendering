@@ -7,6 +7,8 @@
 #include "Renderer.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "BufferLayout.h"
+#include "VertexArray.h"
 #include "Shader.h"
 
 
@@ -56,45 +58,36 @@ int main(void){
         0, 1, 2,
         2, 3, 0
     };
-
-    unsigned int vertex_attrib;
-    GLCall(glGenVertexArrays(1, &vertex_attrib));
-    GLCall(glBindVertexArray(vertex_attrib));
-
-
+    
+    VertexArray* vertex_attrib = new VertexArray();
     VertexBuffer* vertex_buffer = new VertexBuffer(coordinates, 4 * sizeof(vertex));
-
-    GLCall(glEnableVertexAttribArray(0));
-    GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0));
-
+    BufferLayout* layout = new BufferLayout();
+    layout->Push<float>(3);
+    vertex_attrib->AddBuffer(*vertex_buffer, *layout);
 
     IndexBuffer* index_buffer = new IndexBuffer(indecies, 6);
 
     Shader* shader = new Shader("/home/Frillion/3D-Rendering/resources/shaders/Basic.shader");
     shader->Bind();
 
-    GLCall(int location  = glGetUniformLocation(shader->GetProgram(), "u_Color"));
-    ASSERT(location != -1);
-
     float red_channel = 0.0f;
     float increment = 0.05f;
 
-    GLCall(glBindVertexArray(0));
+    vertex_attrib->Unbind();
     shader->UnBind();
-    GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+    vertex_buffer->Unbind();
     index_buffer->Unbind();
+
+    Renderer renderer;
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window)){
         /* Render here */
         GLCall(glClear(GL_COLOR_BUFFER_BIT));
         
         shader->Bind();
-        GLCall(glUniform4f(location, red_channel, 0.3f, 0.8f, 1.0f));
+        shader->SetUniform4f("u_Color",red_channel, 0.0f, 0.0f, 1.0f);
 
-        GLCall(glBindVertexArray(vertex_attrib));
-        index_buffer->Bind(); 
-
-        GLCall(glDrawElements(GL_TRIANGLES, index_buffer->GetCount(), GL_UNSIGNED_INT, nullptr));
+        renderer.Draw(*vertex_attrib, *index_buffer, *shader);
 
         if (red_channel > 1.0f || red_channel < 0.0f){
             increment = -increment;
@@ -106,7 +99,8 @@ int main(void){
         /* Poll for and process events */
         glfwPollEvents();
     }
-    
+    delete vertex_attrib;
+    delete layout;
     delete vertex_buffer;
     delete index_buffer;
     delete shader;
