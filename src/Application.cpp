@@ -29,7 +29,7 @@ int main(void){
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(1920, 1080, "3D-Rendering", NULL, NULL);
+    window = glfwCreateWindow(640, 480, "3D-Rendering", NULL, NULL);
     if (!window){
         glfwTerminate();
         return -1;
@@ -79,6 +79,7 @@ int main(void){
     Texture* texture = new Texture("/home/Frillion/3D-Rendering/resources/kirby.png");
     texture->Bind();
     shader->SetUniform1i("u_Texture", 0);
+    shader->SetUniformMat4f("u_MVP", proj);
 
     float red_channel = 0.0f;
     float increment = 0.05f;
