@@ -8,6 +8,7 @@ out vec2 v_texCoord;
 
 void main(){
    gl_Position = position;
+   v_texCoord = texCoord;
 };
 
 #shader fragment

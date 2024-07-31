@@ -44,6 +44,9 @@ int main(void){
     
     std::cout << glGetString(GL_VERSION) << std::endl;
 
+    GLCall(glEnable(GL_BLEND));
+    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+
     float coordinates[] = {
           -0.5f, -0.5f, 0.0f, 0.0f,
           0.5f, -0.5f, 1.0f, 0.0f,
@@ -87,7 +90,7 @@ int main(void){
         renderer.Clear();        
 
         shader->Bind();
-        shader->SetUniform4f("u_Color",red_channel, 0.0f, 0.0f, 1.0f);
+        // shader->SetUniform4f("u_Color",red_channel, 0.0f, 0.0f, 1.0f);
 
         renderer.Draw(*vertex_attrib, *index_buffer, *shader);
 
