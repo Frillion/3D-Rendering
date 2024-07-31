@@ -12,6 +12,9 @@
 #include "VertexArray.h"
 #include "Shader.h"
 
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+
 
 int main(void){
     GLFWwindow* window;
@@ -67,6 +70,8 @@ int main(void){
     vertex_attrib->AddBuffer(*vertex_buffer, *layout);
 
     IndexBuffer* index_buffer = new IndexBuffer(indecies, 6);
+
+    glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f);
 
     Shader* shader = new Shader("/home/Frillion/3D-Rendering/resources/shaders/Basic.shader");
     shader->Bind();
