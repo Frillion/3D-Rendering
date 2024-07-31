@@ -74,6 +74,11 @@ unsigned int Shader::CreateShader(std::string& vertexSource, std::string&fragmen
 	return program;
 }
 
+void Shader::SetUniform1i(const std::string& name, int v0){
+	int location = GetUniformLocation(name);
+	GLCall(glUniform1i(location, v0));
+}
+
 void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3){
 	int location = GetUniformLocation(name);
 	GLCall(glUniform4f(location, v0, v1, v2, v3))

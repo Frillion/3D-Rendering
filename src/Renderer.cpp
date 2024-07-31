@@ -13,6 +13,14 @@ unsigned int CheckGLErrors(const char* function, const char* file, int line){
     return 1;
 }
 
+Renderer::Renderer(){}
+
+Renderer::~Renderer(){}
+
+void Renderer::Clear() const{
+    GLCall(glClear(GL_COLOR_BUFFER_BIT));
+}
+
 void Renderer::Draw(const VertexArray& vertex_attrib, const IndexBuffer& index_buffer, const Shader& program) const {
     program.Bind();
     vertex_attrib.Bind();

@@ -5,16 +5,13 @@
 #include <GLFW/glfw3.h>
 
 #include "Renderer.h"
+#include "Texture.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "BufferLayout.h"
 #include "VertexArray.h"
 #include "Shader.h"
 
-
-struct vertex{
-    float pos[3];
-};
 
 int main(void){
     GLFWwindow* window;
@@ -47,11 +44,11 @@ int main(void){
     
     std::cout << glGetString(GL_VERSION) << std::endl;
 
-    vertex coordinates[6] = {
-        { { -0.5f, -0.5f, 0.0f } },
-        { { 0.5f, -0.5f, 0.0f } },
-        { { 0.5f, 0.5f, 0.0f } },
-        { { -0.5f, 0.5f, 0.0f } },
+    float coordinates[] = {
+          -0.5f, -0.5f, 0.0f, 0.0f,
+          0.5f, -0.5f, 1.0f, 0.0f,
+          0.5f, 0.5f, 1.0f, 1.0f,
+          -0.5f, 0.5f, 0.0f, 1.0f,
     };
 
     unsigned int indecies[] = {
@@ -60,15 +57,20 @@ int main(void){
     };
     
     VertexArray* vertex_attrib = new VertexArray();
-    VertexBuffer* vertex_buffer = new VertexBuffer(coordinates, 4 * sizeof(vertex));
+    VertexBuffer* vertex_buffer = new VertexBuffer(coordinates, 16 * sizeof(float));
     BufferLayout* layout = new BufferLayout();
-    layout->Push<float>(3);
+    layout->Push<float>(2);
+    layout->Push<float>(2);
     vertex_attrib->AddBuffer(*vertex_buffer, *layout);
 
     IndexBuffer* index_buffer = new IndexBuffer(indecies, 6);
 
     Shader* shader = new Shader("/home/Frillion/3D-Rendering/resources/shaders/Basic.shader");
     shader->Bind();
+
+    Texture* texture = new Texture("/home/Frillion/3D-Rendering/resources/kirby.png");
+    texture->Bind();
+    shader->SetUniform1i("u_Texture", 0);
 
     float red_channel = 0.0f;
     float increment = 0.05f;
@@ -82,8 +84,8 @@ int main(void){
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window)){
         /* Render here */
-        GLCall(glClear(GL_COLOR_BUFFER_BIT));
-        
+        renderer.Clear();        
+
         shader->Bind();
         shader->SetUniform4f("u_Color",red_channel, 0.0f, 0.0f, 1.0f);
 
@@ -104,6 +106,7 @@ int main(void){
     delete vertex_buffer;
     delete index_buffer;
     delete shader;
+    delete texture;
 
     glfwTerminate();
     return 0;

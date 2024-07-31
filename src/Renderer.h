@@ -7,5 +7,8 @@
 
 class Renderer{
 	public:
+        Renderer();
+        ~Renderer();
+        void Clear() const;
 		void Draw(const VertexArray& vertex_attrib, const IndexBuffer& index_buffer, const Shader& program) const;
 };
