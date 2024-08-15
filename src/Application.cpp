@@ -29,7 +29,11 @@ int main(void){
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "3D-Rendering", NULL, NULL);
+    window = glfwCreateWindow(1920, 1080, "3D-Rendering", NULL, NULL);
+    int width,height;
+    glfwGetWindowSize(window, &width, &height);
+    float fwidth = (float)width;
+    float fheight = (float)height;
     if (!window){
         glfwTerminate();
         return -1;
@@ -51,10 +55,10 @@ int main(void){
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
     float coordinates[] = {
-          -0.5f, -0.5f, 0.0f, 0.0f,
-          0.5f, -0.5f, 1.0f, 0.0f,
-          0.5f, 0.5f, 1.0f, 1.0f,
-          -0.5f, 0.5f, 0.0f, 1.0f,
+          100.0f, 100.0f, 0.0f, 0.0f,
+          200.0f, 100.0f, 1.0f, 0.0f,
+          200.0f, 200.0f, 1.0f, 1.0f,
+          100.0f, 200.0f, 0.0f, 1.0f,
     };
 
     unsigned int indecies[] = {
@@ -70,16 +74,19 @@ int main(void){
     vertex_attrib->AddBuffer(*vertex_buffer, *layout);
 
     IndexBuffer* index_buffer = new IndexBuffer(indecies, 6);
+    
+    glm::mat4 proj = glm::ortho(0.0f, fwidth, 0.0f, fheight, -1.0f, 1.0f);
+    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-100.0f, 0.0f, 0.0f));
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(200, 200, 0));
+    glm::mat4 mvp =  proj * view * model;
 
-    glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f);
-
-    Shader* shader = new Shader("/home/Frillion/3D-Rendering/resources/shaders/Basic.shader");
+    Shader* shader = new Shader("/home/Frillion/Projects/personal/3D-Rendering/resources/shaders/Basic.shader");
     shader->Bind();
 
-    Texture* texture = new Texture("/home/Frillion/3D-Rendering/resources/kirby.png");
+    Texture* texture = new Texture("/home/Frillion/Projects/personal/3D-Rendering/resources/kirby.png");
     texture->Bind();
     shader->SetUniform1i("u_Texture", 0);
-    shader->SetUniformMat4f("u_MVP", proj);
+    shader->SetUniformMat4f("u_MVP", mvp);
 
     float red_channel = 0.0f;
     float increment = 0.05f;

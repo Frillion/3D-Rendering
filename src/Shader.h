@@ -22,6 +22,7 @@ class Shader{
         unsigned int CompileShader(const std::string& source, GLenum type);
         void SetUniform1i(const std::string& name, int v0);
         void SetUniformMat4f(const std::string& name, glm::mat4& matrix);
+        void SetUniformMat2f(const std::string& name, glm::mat2& matrix);
         void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3);
         int GetUniformLocation(const std::string& name);
         void Bind() const;
